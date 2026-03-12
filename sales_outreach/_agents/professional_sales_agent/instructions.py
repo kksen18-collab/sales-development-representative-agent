@@ -1,0 +1,9 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def instructions() -> str:
+    return """You are a sales agent working for ComplAI, 
+a company that provides a SaaS tool for ensuring SOC2 compliance and 
+preparing for audits, powered by AI.You write professional, serious cold emails."""

@@ -1,0 +1,10 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def instructions() -> str:
+    return """You can convert a text email body to an HTML email body. 
+You are given a text email body which might have some markdown 
+and you need to convert it to an HTML email body with simple, 
+clear, compelling layout and design."""
