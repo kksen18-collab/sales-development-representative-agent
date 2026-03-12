@@ -290,6 +290,86 @@ The application uses structured logging. Logs are output to console with the for
 
 Adjust log levels in [logger.py](sales_outreach/logger.py#L7).
 
+### Tracing Agent Execution
+
+The project uses OpenAI Agents Framework's built-in tracing to monitor and debug agent execution flows. Traces capture:
+- **Agent decisions** and tool calls
+- **Execution flow** through the agent hierarchy
+- **Intermediate outputs** from each agent
+- **Guardrail checks** and their results
+
+#### Enabling Traces
+
+Traces are automatically recorded when agents run. They're wrapped in the `trace()` context manager in [agent_orchestrator.py](sales_outreach/agent_orchestrator.py#L100):
+
+```python
+with trace("Automated Sales Development Representative"):
+    result = await Runner.run(
+        sales_outreach_agent,
+        input=self.params.sales_outreach_input_message,
+        run_config=RunConfig(...)
+    )
+```
+
+#### Viewing Traces
+
+OpenAI traces are sent to the **OpenAI Traces Dashboard** (available in your OpenAI account under [Platform > Traces](https://platform.openai.com/traces)). Traces appear there automatically when agents execute.
+
+To also enable local trace logging:
+
+```python
+import logging
+
+# Enable trace logging
+logging.getLogger("agents").setLevel(logging.DEBUG)
+```
+
+Or set environment variable:
+```bash
+AGENTS_LOG_LEVEL=DEBUG
+```
+
+**Note**: Ensure your `OPENAI_API_KEY` is set for traces to be sent to OpenAI's servers.
+
+#### Example Trace Output
+
+```
+Trace: Automated Sales Development Representative
+├── Input: "Send a cold email to CEO about SOC2 tool"
+├── Guardrail Check
+│   └── Output: name_found=False, proceed=True
+├── Sales Manager Agent
+│   ├── Busy Sales Agent
+│   │   └── Output: "Dear CEO, [concise email]"
+│   ├── Engaging Sales Agent
+│   │   └── Output: "Hey CEO, [witty email]"
+│   ├── Professional Sales Agent
+│   │   └── Output: "Dear CEO, [formal email]"
+│   └── Selection: Professional Agent wins
+├── Email Writer Agent
+│   ├── Subject Writer
+│   │   └── Output: "Achieve SOC2 Compliance in 30 Days"
+│   ├── HTML Converter
+│   │   └── Output: "<html>[formatted email]</html>"
+│   └── SendGrid Send
+│       └── Status: Success
+└── Final Output: Email sent successfully
+```
+
+#### Custom Traces
+
+To add traces to custom agents:
+
+```python
+from agents import trace
+
+with trace("My Custom Agent Operation"):
+    result = await my_async_operation()
+    logger.info(f"Operation result: {result}")
+```
+
+This helps debug complex multi-agent workflows and understand decision-making processes.
+
 ## 🚨 Troubleshooting
 
 ### "Invalid OpenAI API Key"
