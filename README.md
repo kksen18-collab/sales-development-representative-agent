@@ -315,21 +315,41 @@ with trace("Automated Sales Development Representative"):
 
 OpenAI traces are sent to the **OpenAI Traces Dashboard** (available in your OpenAI account under [Platform > Traces](https://platform.openai.com/traces)). Traces appear there automatically when agents execute.
 
-To also enable local trace logging:
+To also enable detailed local debug logging:
 
+**Option 1: Python Code**
 ```python
 import logging
 
-# Enable trace logging
+# Enable trace logging - shows DEBUG level messages
 logging.getLogger("agents").setLevel(logging.DEBUG)
 ```
 
-Or set environment variable:
-```bash
-AGENTS_LOG_LEVEL=DEBUG
+**Option 2: Environment Variable (Windows PowerShell)**
+```powershell
+$env:AGENTS_LOG_LEVEL="DEBUG"
+uv run -m sales_outreach.app
 ```
 
-**Note**: Ensure your `OPENAI_API_KEY` is set for traces to be sent to OpenAI's servers.
+**Option 3: Environment Variable (macOS/Linux)**
+```bash
+export AGENTS_LOG_LEVEL=DEBUG
+uv run -m sales_outreach.app
+```
+
+#### Logging Levels
+
+The agents logger supports different verbosity levels:
+
+| Level | What You See | Use Case |
+|-------|--------------|----------|
+| `DEBUG` | Detailed trace info, all decisions, tool calls | Debugging agent behavior |
+| `INFO` | General informational messages (default) | Production monitoring |
+| `WARNING` | Warning messages only | Minimal logging |
+| `ERROR` | Errors only | Error tracking |
+| `CRITICAL` | Critical errors only | Severe issues only |
+
+**Note**: Ensure your `OPENAI_API_KEY` is set for traces to be sent to OpenAI's Traces Dashboard.
 
 #### Example Trace Output
 

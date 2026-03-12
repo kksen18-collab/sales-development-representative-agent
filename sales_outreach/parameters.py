@@ -32,7 +32,7 @@ class SalesOutreachSettings(BaseSettings):
 
 class SalesOutreachParameters(BaseModel):
     sales_outreach_input_message: str = (
-        "Send out a cold sales email addressed to Dear CEO from Alice"
+        "Send out a cold sales email addressed to Dear CEO from Head of Bussiness Development"
     )
 
 

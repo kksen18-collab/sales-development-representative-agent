@@ -11,13 +11,18 @@ LOGGING_CONFIG = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "level": "INFO",
+            "level": "DEBUG",
             "formatter": "standard",
             "stream": "ext://sys.stdout",
         },
     },
     "loggers": {
         "sales_outreach": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
+        },
+        "agents": {
             "level": "DEBUG",
             "handlers": ["console"],
             "propagate": False,
